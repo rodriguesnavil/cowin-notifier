@@ -1,8 +1,12 @@
 const axios = require('axios')
 require('dotenv').config()
-const {formatDate} = require('./utils')
+const {
+    formatDate,
+    pincodeList
+} = require('./utils')
 const cron = require('node-cron')
 const winston = require('winston')
+
 
 const logger = winston.createLogger({
     transports: [
@@ -29,8 +33,8 @@ async function cowinAvailabilityChecker() {
         const response = await axios.get(url)
         if(response.data && response.data.centers){
             let centresObject = response.data.centers
-            let requiredData = centresObject.filter( (obj) => {
-                return obj.pincode === 401301 || obj.pincode === 401201
+            let requiredData = centresObject.filter((obj) => {
+                return pincodeList.includes(obj.pincode)
             })
             Object.keys(requiredData).forEach(i =>{
                 Object.keys(requiredData[i].sessions).forEach(j =>{
@@ -55,6 +59,6 @@ async function runSlackNotifier(centerName, availabilityDate) {
     const slackToken = process.env.SLACK_TOKEN
     await axios.post(url, {
       channel: '#cowin-update',
-      text: `Slots available at ${centerName} for ${availabilityDate}`
+      text: `${centerName}: ${availabilityDate}`
     }, { headers: { authorization: `Bearer ${slackToken}` } })
 }
