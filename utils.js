@@ -24,7 +24,8 @@ const pincodeList = [
   401201,
   401304,
   401207,
-  401305
+  401305,
+  401208
 ]
 
 module.exports = {
