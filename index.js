@@ -30,10 +30,15 @@ async function cowinAvailabilityChecker() {
     const DATE = formatDate(new Date())
     const url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${DATE}`
     try{
-        const response = await axios.get(url)
-        let valueString = 'Available! Reserve your slot.\n'
-        let flag = false
+        let response = await axios.get(url, 
+            {
+                headers: { 
+                'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36',
+            }
+        })
         if(response.data && response.data.centers){
+            let flag = false
+            let valueString = ''
             let centresObject = response.data.centers
             let requiredData = centresObject.filter((obj) => {
                 return preferredPincodeList.includes(obj.pincode)
@@ -49,9 +54,9 @@ async function cowinAvailabilityChecker() {
                     }
                 })
             })
-        }
-        if(flag){
-            runSlackNotifier('', valueString)
+            if(flag){
+                runSlackNotifier('', valueString)
+            }
         }
     }
     catch(e){
@@ -66,9 +71,9 @@ async function cowinAvailabilityChecker() {
 async function runSlackNotifier(key, value) {
     logger.log({level: 'info', message: 'Slack notification triggered'})
     const url = 'https://slack.com/api/chat.postMessage';
-    const slackToken = process.env.SLACK_TOKEN
+    const slackToken = process.env.SLACK_TOKEN_V2
     await axios.post(url, {
-      channel: '#cowin-update',
+      channel: '#notification',
       text: `${key} ${value}`
     }, { headers: { authorization: `Bearer ${slackToken}` } })
 }
