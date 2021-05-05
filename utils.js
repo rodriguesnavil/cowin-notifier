@@ -16,7 +16,12 @@ const formatDate = (date) => {
   }
 }
 
-const pincodeList = [
+
+const districtIdMapper = {
+  "PALGHAR": 394,
+}
+
+const preferredPincodeList = [
   401301,
   401302,
   401303,
@@ -30,5 +35,6 @@ const pincodeList = [
 
 module.exports = {
   formatDate,
-  pincodeList
+  preferredPincodeList,
+  districtIdMapper
 }

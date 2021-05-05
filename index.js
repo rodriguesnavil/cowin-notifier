@@ -2,7 +2,8 @@ const axios = require('axios')
 require('dotenv').config()
 const {
     formatDate,
-    pincodeList
+    preferredPincodeList,
+    districtIdMapper
 } = require('./utils')
 const cron = require('node-cron')
 const winston = require('winston')
@@ -15,34 +16,42 @@ const logger = winston.createLogger({
     ]
 })
 
-cron.schedule('*/5 * * * *', () => {
-    console.log('Cron is running')
+cron.schedule('*/30 * * * * *', () => {
     logger.log({
         level: 'info',
-        message: `Cron is running, Time:${new Date()}`
+        message: `Job running every 30 seconds ${new Date()}`
     })
-    cowinAvailabilityChecker().catch(err => runSlackNotifier('Error occured:',err))
+    cowinAvailabilityChecker()
 })
 
 
 async function cowinAvailabilityChecker() {
-    let district = 394
-    const today = formatDate(new Date())
-    const url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${district}&date=${today}`
+    let districtId = districtIdMapper.PALGHAR
+    const DATE = formatDate(new Date())
+    const url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${DATE}`
     try{
         const response = await axios.get(url)
+        let valueString = 'Available! Reserve your slot.\n'
+        let flag = false
         if(response.data && response.data.centers){
             let centresObject = response.data.centers
             let requiredData = centresObject.filter((obj) => {
-                return pincodeList.includes(obj.pincode)
+                return preferredPincodeList.includes(obj.pincode)
             })
             Object.keys(requiredData).forEach(i =>{
                 Object.keys(requiredData[i].sessions).forEach(j =>{
                     if(requiredData[i].sessions[j].available_capacity !== 0){
-                        runSlackNotifier(requiredData[i].name, requiredData[i].sessions[j].date)
+                        flag = true
+                        let centerName = requiredData[i].name
+                        let sessionDate = requiredData[i].sessions[j].date
+                        let available_capacity = requiredData[i].sessions[j].available_capacity
+                        valueString += `${centerName} available for date ${sessionDate} slot number ${j+1} with capacity of ${available_capacity}\n\n`
                     }
                 })
             })
+        }
+        if(flag){
+            runSlackNotifier('', valueString)
         }
     }
     catch(e){
@@ -50,15 +59,16 @@ async function cowinAvailabilityChecker() {
             level: 'error',
             message: e
         })
-        runSlackNotifier('Exception occured:', e)
+        runSlackNotifier('Exception:', e)
     }
 }
 
-async function runSlackNotifier(centerName, availabilityDate) {
+async function runSlackNotifier(key, value) {
+    logger.log({level: 'info', message: 'Slack notification triggered'})
     const url = 'https://slack.com/api/chat.postMessage';
     const slackToken = process.env.SLACK_TOKEN
     await axios.post(url, {
       channel: '#cowin-update',
-      text: `${centerName}: ${availabilityDate}`
+      text: `${key} ${value}`
     }, { headers: { authorization: `Bearer ${slackToken}` } })
 }
