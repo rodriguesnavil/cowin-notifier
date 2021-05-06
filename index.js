@@ -44,13 +44,13 @@ async function cowinAvailabilityChecker() {
             })
             Object.keys(requiredData).forEach(i =>{
                 Object.keys(requiredData[i].sessions).forEach(j =>{
-                    if(requiredData[i].sessions[j].available_capacity !== 0){
+                    if(requiredData[i].sessions[j].available_capacity !== 0 && requiredData[i].sessions[j].min_age_limit === 18){
                         flag = true
                     }
                 })
             })
             if(flag){
-                runSlackNotifier('', `Quick!\nReserve your slot\nVisit www.cowin.gov.in, select state as Maharashtra and district as Palghar\n`)
+                runSlackNotifier('', `Quick!\nReserve your slot for age 18+\nVisit www.cowin.gov.in, select state as Maharashtra and district as Palghar\n`)
             }
         }
     }
