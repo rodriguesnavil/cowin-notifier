@@ -48,9 +48,11 @@ async function cowinAvailabilityChecker() {
                     if(requiredData[i].sessions[j].available_capacity !== 0){
                         flag = true
                         let centerName = requiredData[i].name
+                        let pincode = requiredData[i].pincode
                         let sessionDate = requiredData[i].sessions[j].date
                         let available_capacity = requiredData[i].sessions[j].available_capacity
-                        valueString += `${centerName} available for date ${sessionDate} slot number ${j+1} with capacity of ${available_capacity}\n\n`
+                        let vaccineName = requiredData[i].sessions[j].vaccine
+                        valueString += `Center name: ${centerName} ( ${pincode} ) \nAvailable date: ${sessionDate} \nSlot number: ${j+1} \nCapacity: ${available_capacity} \nVaccine name: ${vaccineName}\n\n`
                     }
                 })
             })
