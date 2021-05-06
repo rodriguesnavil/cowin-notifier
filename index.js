@@ -38,7 +38,6 @@ async function cowinAvailabilityChecker() {
         })
         if(response.data && response.data.centers){
             let flag = false
-            let valueString = ''
             let centresObject = response.data.centers
             let requiredData = centresObject.filter((obj) => {
                 return preferredPincodeList.includes(obj.pincode)
@@ -47,12 +46,11 @@ async function cowinAvailabilityChecker() {
                 Object.keys(requiredData[i].sessions).forEach(j =>{
                     if(requiredData[i].sessions[j].available_capacity !== 0){
                         flag = true
-                        valueString += `Quick!!!\nReserve your slot\nVisit www.cowin.gov.in, select state as Maharashtra and district as Palghar`
                     }
                 })
             })
             if(flag){
-                runSlackNotifier('', valueString)
+                runSlackNotifier('', `Quick!\nReserve your slot\nVisit www.cowin.gov.in, select state as Maharashtra and district as Palghar\n`)
             }
         }
     }
