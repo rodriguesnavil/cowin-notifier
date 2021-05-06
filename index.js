@@ -47,12 +47,7 @@ async function cowinAvailabilityChecker() {
                 Object.keys(requiredData[i].sessions).forEach(j =>{
                     if(requiredData[i].sessions[j].available_capacity !== 0){
                         flag = true
-                        let centerName = requiredData[i].name
-                        let pincode = requiredData[i].pincode
-                        let sessionDate = requiredData[i].sessions[j].date
-                        let available_capacity = requiredData[i].sessions[j].available_capacity
-                        let vaccineName = requiredData[i].sessions[j].vaccine
-                        valueString += `Center name: ${centerName} ( ${pincode} ) \nAvailable date: ${sessionDate} \nSlot number: ${j+1} \nCapacity: ${available_capacity} \nVaccine name: ${vaccineName}\n\n`
+                        valueString += `Quick!!!\nReserve your slot\nVisit www.cowin.gov.in, select state as Maharashtra and district as Palghar`
                     }
                 })
             })
