@@ -16,7 +16,7 @@ const logger = winston.createLogger({
     ]
 })
 
-cron.schedule('*/2 * * * * *', () => {
+cron.schedule('*/10 * * * * *', () => {
     logger.log({
         level: 'info',
         message: `${new Date()}`
