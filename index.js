@@ -16,10 +16,10 @@ const logger = winston.createLogger({
     ]
 })
 
-cron.schedule('*/30 * * * * *', () => {
+cron.schedule('*/2 * * * * *', () => {
     logger.log({
         level: 'info',
-        message: `Job running every 30 seconds ${new Date()}`
+        message: `${new Date()}`
     })
     cowinAvailabilityChecker()
 })
@@ -32,27 +32,32 @@ async function cowinAvailabilityChecker() {
     try{
         let response = await axios.get(url, 
             {
-                headers: { 
+                headers: {
                 'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36',
+                'Content-Type': 'application/json',
+                'Cache-Control' : 'no-cache'
             }
         })
         if(response.data && response.data.centers){
             let flag = false
-            let valueString = ''
+            let valueString = 'Reserve your slot!\n'
             let centresObject = response.data.centers
             let requiredData = centresObject.filter((obj) => {
                 return preferredPincodeList.includes(obj.pincode)
             })
             Object.keys(requiredData).forEach(i =>{
                 Object.keys(requiredData[i].sessions).forEach(j =>{
-                    if(requiredData[i].sessions[j].available_capacity !== 0){
+                    if(requiredData[i].sessions[j].available_capacity > 0){
                         flag = true
                         let centerName = requiredData[i].name
+                        let address = requiredData[i].address
                         let pincode = requiredData[i].pincode
                         let sessionDate = requiredData[i].sessions[j].date
                         let available_capacity = requiredData[i].sessions[j].available_capacity
                         let vaccineName = requiredData[i].sessions[j].vaccine
-                        valueString += `Center name: ${centerName} ( ${pincode} ) \nAvailable date: ${sessionDate} \nSlot number: ${j+1} \nCapacity: ${available_capacity} \nVaccine name: ${vaccineName}\n\n`
+                        let feeType = requiredData[i].fee_type
+                        let minAge = requiredData[i].sessions[j].min_age_limit
+                        valueString += `Center name: ${centerName} ( ${pincode} )\nMinimum Age: ${minAge}\nAddress: ${address} \nAvailable date: ${sessionDate}\nCapacity: ${available_capacity}\nVaccine name: ${vaccineName}\nFee Type: ${feeType}\n\n*************************************\n`
                     }
                 })
             })
@@ -66,16 +71,16 @@ async function cowinAvailabilityChecker() {
             level: 'error',
             message: e
         })
-        runSlackNotifier('Exception:', e)
+        runSlackNotifier('Error:', e)
     }
 }
 
 async function runSlackNotifier(key, value) {
     logger.log({level: 'info', message: 'Slack notification triggered'})
     const url = 'https://slack.com/api/chat.postMessage';
-    const slackToken = process.env.SLACK_TOKEN_V2
+    const slackToken = process.env.SLACK_TOKEN
     await axios.post(url, {
-      channel: '#notification',
+      channel: '#cowin-update',
       text: `${key} ${value}`
     }, { headers: { authorization: `Bearer ${slackToken}` } })
 }
