@@ -43,7 +43,7 @@ async function cowinAvailabilityChecker() {
         })
         if(response.data && response.data.centers){
             let flag = false
-            let valueString = 'Reserve your slot!\n'
+            let valueString = 'RESERVE YOUR SLOT!\n'
             let centresObject = response.data.centers
             let requiredData = centresObject.filter((obj) => {
                 return preferredPincodeList.includes(obj.pincode)
@@ -60,7 +60,8 @@ async function cowinAvailabilityChecker() {
                         let vaccineName = requiredData[i].sessions[j].vaccine
                         let feeType = requiredData[i].fee_type
                         let minAge = requiredData[i].sessions[j].min_age_limit
-                        valueString += `Center name: ${centerName} ( ${pincode} )\nMinimum Age: ${minAge}\nAddress: ${address} \nAvailable date: ${sessionDate}\nCapacity: ${available_capacity}\nVaccine name: ${vaccineName}\nFee Type: ${feeType}\n\n*************************************\n`
+                        let timeStamp = new Date().getHours() + ':' +new Date().getMinutes() + ':'+new Date().getSeconds()
+                        valueString += `Center name: ${centerName} ( ${pincode} )\nMinimum Age: ${minAge}\nAddress: ${address} \nAvailable date: ${sessionDate}\nCapacity: ${available_capacity}\nVaccine name: ${vaccineName}\nFee Type: ${feeType}\nTimeStamp: ${timeStamp}\n\n*************************************\n`
                     }
                 })
             })
