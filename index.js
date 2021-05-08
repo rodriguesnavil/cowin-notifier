@@ -50,7 +50,7 @@ async function cowinAvailabilityChecker() {
             })
             Object.keys(requiredData).forEach(i =>{
                 Object.keys(requiredData[i].sessions).forEach(j =>{
-                    if(requiredData[i].sessions[j].available_capacity === 0){
+                    if(requiredData[i].sessions[j].available_capacity > 0){
                         flag = true
                         let centerName = requiredData[i].name
                         let address = requiredData[i].address
