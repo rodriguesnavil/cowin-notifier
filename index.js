@@ -35,7 +35,9 @@ async function cowinAvailabilityChecker() {
                 headers: {
                 'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36',
                 'Content-Type': 'application/json',
-                'Cache-Control' : 'no-cache'
+                'Cache-Control' : 'no-cache',
+                'Pragma': 'no-cache',
+                'Expires': '0'
             }
         })
         if(response.data && response.data.centers){
