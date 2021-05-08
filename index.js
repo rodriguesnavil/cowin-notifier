@@ -28,7 +28,8 @@ cron.schedule('*/5 * * * * *', () => {
 async function cowinAvailabilityChecker() {
     let districtId = districtIdMapper.PALGHAR
     const DATE = formatDate(new Date())
-    const url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${DATE}`
+    const url = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${DATE}&timestamp=${new Date().getTime()}`
+    console.log(url)
     try{
         let response = await axios.get(url, 
             {
@@ -49,7 +50,7 @@ async function cowinAvailabilityChecker() {
             })
             Object.keys(requiredData).forEach(i =>{
                 Object.keys(requiredData[i].sessions).forEach(j =>{
-                    if(requiredData[i].sessions[j].available_capacity > 0){
+                    if(requiredData[i].sessions[j].available_capacity === 0){
                         flag = true
                         let centerName = requiredData[i].name
                         let address = requiredData[i].address
