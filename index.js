@@ -82,9 +82,9 @@ async function cowinAvailabilityChecker() {
 async function runSlackNotifier(key, value) {
     logger.log({level: 'info', message: 'Slack notification triggered'})
     const url = 'https://slack.com/api/chat.postMessage';
-    const slackToken = process.env.SLACK_TOKEN
+    const slackToken = process.env.SLACK_TOKEN_V2
     await axios.post(url, {
-      channel: '#cowin-update',
+        channel: '#notification',
       text: `${key} ${value}`
     }, { headers: { authorization: `Bearer ${slackToken}` } })
 }
