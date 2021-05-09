@@ -60,7 +60,7 @@ async function cowinAvailabilityChecker() {
                         let vaccineName = requiredData[i].sessions[j].vaccine
                         let feeType = requiredData[i].fee_type
                         let minAge = requiredData[i].sessions[j].min_age_limit
-                        let timeStamp = new Date().getHours() + ':' +new Date().getMinutes() + ':'+new Date().getSeconds()
+                        let timeStamp = new Date()
                         valueString += `Center name: ${centerName} ( ${pincode} )\nMinimum Age: ${minAge}\nAddress: ${address} \nAvailable date: ${sessionDate}\nCapacity: ${available_capacity}\nVaccine name: ${vaccineName}\nFee Type: ${feeType}\nTimeStamp: ${timeStamp}\n\n*************************************\n`
                     }
                 })
