@@ -48,7 +48,7 @@ cron.schedule('*/30 * * * * *', () => {
 
 ###### Note: - the url `https://cdn-api.co-vin.in/api/v2/admin/location/districts/21` is specific to the state of Maharashtra only
 
-### runSlackNotifier
+#### runSlackNotifier
 - The `runSlackNotifier` function is where the notifier actually send the notification.
 - In order to use slack we need to generate a slack token and use it as below
 ```
