@@ -8,3 +8,4 @@ In this project we have implemeted a notifier for vaccination based on users cur
 
 |Library|Version|
 |-------|:-----:|
+|axios|0.21.1|
