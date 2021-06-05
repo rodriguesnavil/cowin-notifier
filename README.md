@@ -8,4 +8,4 @@ In this project we have implemeted a notifier for vaccination based on users cur
 
 |Library|Version|
 |-------|:-----:|
-|axios|0.21.1|
+|[axios](https://www.npmjs.com/package/axios)|0.21.1|
