@@ -15,3 +15,11 @@ In this project we have implemeted a notifier for vaccination based on users cur
 |[@slack/events-api](https://slack.dev/node-slack-sdk/events-api)|3.0.0|
 |[@slack/web-api](https://api.slack.com/web)|6.1.0|
 
+### Working
+
+In order to understand the working of this notifier we will take a look at two functions and a module whose names are specified below
+
+* cron.schedule
+* cowinAvailabilityChecker
+* runSlackNotifier
+
