@@ -43,6 +43,26 @@ cron.schedule('*/30 * * * * *', () => {
 
 - This function is called in the `cron.schedule` module after every 30 seconds.
 - The functions uses `axios` to hit the url  `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${DATE}` where `DATE` is the current date and `districtId` is district id that is provided by the url `https://cdn-api.co-vin.in/api/v2/admin/location/districts/21`.
+- The function creates a message of the format `Center name: ${centerName} ( ${pincode} ) \nAvailable date: ${sessionDate} \nSlot number: ${j+1} \nCapacity: ${available_capacity} \nVaccine name: ${vaccineName}\n\n`, which tells about details such as center name, pincode, vaccine name, available capacity and session date along with slot number
+- This message is then sent over slack to all subscribed user
 
 ###### Note: - the url `https://cdn-api.co-vin.in/api/v2/admin/location/districts/21` is specific to the state of Maharashtra only
+
+### runSlackNotifier
+- The `runSlackNotifier` function is where the notifier actually send the notification.
+- In order to use slack we need to generate a slack token and use it as below
+```
+    const url = 'https://slack.com/api/chat.postMessage';
+    const slackToken = process.env.SLACK_TOKEN_V2
+```
+- The slack token is an authorization token that is sent in the header in order to ensure security and limit the api use
+- Below we can see how it is used to send a request with axios
+```
+    await axios.post(url, {
+      channel: '#notification',
+      text: `${key} ${value}`
+    }, { headers: { authorization: `Bearer ${slackToken}` } })
+```
+- The `key` and `value` are a pair where key identifies the message and value is the message itself.
+- In our use case we use an empty string as key to send a notification message and `Exception` as key to identify any exceptions on server
 
