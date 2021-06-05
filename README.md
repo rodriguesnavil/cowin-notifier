@@ -66,3 +66,9 @@ cron.schedule('*/30 * * * * *', () => {
 - The `key` and `value` are a pair where key identifies the message and value is the message itself.
 - In our use case we use an empty string as key to send a notification message and `Exception` as key to identify any exceptions on server
 
+
+### Running the notifier
+
+** Below are the instructions to run the notifier **
+- `npm run install`
+- `node index.js` 
