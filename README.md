@@ -23,3 +23,18 @@ In order to understand the working of this notifier we will take a look at two f
 * cowinAvailabilityChecker
 * runSlackNotifier
 
+#### cron.schedule
+- the cron.schedule is a module which is mainly used for running a job after a particular duration. In this case we have used it to run after every 30 seconds as you can see below
+
+```
+cron.schedule('*/30 * * * * *', () => {
+    logger.log({
+        level: 'info',
+        message: `Job running every 30 seconds ${new Date()}`
+    })
+    cowinAvailabilityChecker()
+})
+```
+
+As you can see we will call our function `cowinAvailabilityChecker` after every 30 seconds in order to check for available slots 
+
