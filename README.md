@@ -37,4 +37,12 @@ cron.schedule('*/30 * * * * *', () => {
 ```
 
 - As you can see we will call our function `cowinAvailabilityChecker` after every 30 seconds in order to check for available slots 
+- The job also logs the current date and time using the `winston` library
+
+#### cowinAvailabilityChecker
+
+- This function is called in the `cron.schedule` module after every 30 seconds.
+- The functions uses `axios` to hit the url  `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${DATE}` where `DATE` is the current date and `districtId` is district id that is provided by the url `https://cdn-api.co-vin.in/api/v2/admin/location/districts/21`.
+
+###### Note: - the url `https://cdn-api.co-vin.in/api/v2/admin/location/districts/21` is specific to the state of Maharashtra only
 
