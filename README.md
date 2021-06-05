@@ -36,5 +36,5 @@ cron.schedule('*/30 * * * * *', () => {
 })
 ```
 
-As you can see we will call our function `cowinAvailabilityChecker` after every 30 seconds in order to check for available slots 
+- As you can see we will call our function `cowinAvailabilityChecker` after every 30 seconds in order to check for available slots 
 
