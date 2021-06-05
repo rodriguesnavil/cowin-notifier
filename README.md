@@ -69,6 +69,6 @@ cron.schedule('*/30 * * * * *', () => {
 
 ### Running the notifier
 
-** Below are the instructions to run the notifier **
+**Below are the instructions to run the notifier**
 - `npm run install`
 - `node index.js` 
